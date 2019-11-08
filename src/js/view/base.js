@@ -1,11 +1,13 @@
+/* eslint-disable no-undef */
+/* eslint-disable node/no-unsupported-features/es-syntax */
 // get all elements
 
 export const el = {
   // form
-  searchForm: document.querySelector(".search"),
+  searchForm: document.querySelector('.search'),
 
   // input
-  searchInput: document.querySelector(".search__field"),
+  searchInput: document.querySelector('.search__field'),
 
   // recipes list
   recipesList: document.querySelector('.results__list'),
@@ -16,7 +18,7 @@ export const el = {
   searchResPage: document.querySelector('.results__pages')
 };
 
-
+// eslint-disable-next-line node/no-unsupported-features/es-syntax
 export const renderLoader = parent => {
   const loader = `
     <div class='loader'>
@@ -31,6 +33,6 @@ export const renderLoader = parent => {
 export const removeLoader = () => {
   const loader = document.querySelector('.loader');
   if (loader) {
-    loader.parentElement.removeChild(loader)
-  };
+    loader.parentElement.removeChild(loader);
+  }
 };

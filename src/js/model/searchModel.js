@@ -1,9 +1,11 @@
-import axios from "axios";
+/* eslint-disable node/no-unsupported-features/es-syntax */
+// eslint-disable-next-line node/no-unsupported-features/es-syntax
+import axios from 'axios';
 
 export default class Search {
   constructor(query) {
     this.query = query;
-  };
+  }
 
   async getRecipes() {
     try {
@@ -12,7 +14,7 @@ export default class Search {
       );
       this.recipes = res.data.recipes;
     } catch (err) {
-      alert(err);
-    };
-  };
-};
+      console.log(err);
+    }
+  }
+}
