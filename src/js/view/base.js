@@ -15,7 +15,9 @@ export const el = {
   // results div
   searchRes: document.querySelector('.results'),
 
-  searchResPage: document.querySelector('.results__pages')
+  searchResPage: document.querySelector('.results__pages'),
+
+  recipes: document.querySelector('.recipe')
 };
 
 // eslint-disable-next-line node/no-unsupported-features/es-syntax

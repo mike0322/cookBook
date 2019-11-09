@@ -2,6 +2,34 @@
 /* eslint-disable node/no-unsupported-features/es-syntax */
 import axios from 'axios';
 
+// 小數轉換為分數的庫
+import { Fraction } from 'fractional';
+
+// 小數轉換為分數
+export const formatCount = count => {
+  if (count) {
+    // count = 2.5 => 轉換為 string => 轉換為 [2, 5] (str) => 轉換為 [2, 5] (num)
+    const [int, dec] = count
+      .toString()
+      .split('.')
+      .map(el => parseInt(el, 10));
+
+    // count = 1
+    if (!dec) return count;
+
+    if (int === 0) {
+      // count = 0.5 => 1/2
+      const fr = new Fraction(count);
+      return `${fr.numerator}/${fr.denominator}`;
+    }
+    // count = 2.5 => 2 1/2
+    const fr = new Fraction(count - int);
+    return `${int} ${fr.numerator}/${fr.denominator}`;
+  }
+
+  return '?';
+};
+
 export default class Recipe {
   constructor(id) {
     this.id = id;
@@ -17,6 +45,7 @@ export default class Recipe {
       this.author = res.data.recipe.publisher;
       this.img = res.data.recipe.image_url;
       this.ingredients = res.data.recipe.ingredients;
+      this.source_url = res.data.recipe.source_url;
     } catch (err) {
       console.log(err);
     }
@@ -55,6 +84,9 @@ export default class Recipe {
     ];
     const units = [...unitsShort, 'kg', 'g'];
 
+    // 原本是數組裡的字串
+    // console.log(`我是ingredients => ${this.ingredients}`);
+
     const newIngredients = this.ingredients.map(el => {
       // 1) Uniform units
       let ingredient = el.toLowerCase();
@@ -64,10 +96,13 @@ export default class Recipe {
 
       // 2) Remove parentheses
       ingredient = ingredient.replace(/ *\([^)]*\) */g, ' ');
+      //   console.log(`我是ingredient => ${ingredient}`);
 
       // 3) Parse ingredients into count, unit and ingredient
       const arrIng = ingredient.split(' ');
       const unitIndex = arrIng.findIndex(el2 => units.includes(el2));
+      //   console.log(arrIng);
+      //   console.log(unitIndex);
 
       let objIng;
       if (unitIndex > -1) {
@@ -75,6 +110,9 @@ export default class Recipe {
         // Ex. 4 1/2 cups, arrCount is [4, 1/2] --> eval("4+1/2") --> 4.5
         // Ex. 4 cups, arrCount is [4]
         const arrCount = arrIng.slice(0, unitIndex);
+
+        // console.log(`我是arrCount => ${arrCount}`);
+        // console.log(arrCount.length);
 
         let count;
         if (arrCount.length === 1) {
@@ -102,6 +140,8 @@ export default class Recipe {
           unit: '',
           ingredient
         };
+
+        // console.log(ingredient);
       }
 
       return objIng;

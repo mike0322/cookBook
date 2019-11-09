@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable node/no-unsupported-features/es-syntax */
 import { el } from './base';
 
@@ -8,6 +9,15 @@ export const getInput = () => el.searchInput.value;
 export const clearResults = () => {
   el.recipesList.innerHTML = '';
   el.searchResPage.innerHTML = '';
+};
+
+export const highLightSelected = id => {
+  const resultsArr = Array.from(document.querySelectorAll('.results__link'));
+  resultsArr.forEach(item => item.classList.remove('results__link--active'));
+
+  document
+    .querySelector(`a[href*="${id}"]`)
+    .classList.add('results__link--active');
 };
 
 // clear input value (只要執行就好，不需要返回任何東西，因此用花括號包起來)

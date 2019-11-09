@@ -1,17 +1,18 @@
 /* eslint-disable no-undef */
 /* eslint-disable node/no-unsupported-features/es-syntax */
-import Search from './model/searchModel';
+import Search from './model/SearchModel';
 import Recipe from './model/RecipeModel';
 
 import { el, renderLoader, removeLoader } from './view/base';
 
 import * as searchView from './view/SearchView';
+import * as recipeView from './view/RecipeVies';
 
 // init state obj
 const state = {};
 
 /*================
-  Recipe Control
+  Search Control
 ================*/
 const controlSearch = async () => {
   // 1. query = get query from view
@@ -73,7 +74,10 @@ const controlRecipe = async () => {
 
   if (id) {
     // prepare ui for change
+    recipeView.clearRecipe();
+    renderLoader(el.recipes);
 
+    searchView.highLightSelected(id);
     // create new recipe obj
     state.recipe = new Recipe(id);
 
@@ -83,7 +87,7 @@ const controlRecipe = async () => {
     try {
       // get recipe data & parse ingredients
       await state.recipe.getRecipe();
-      console.log(state.recipe.ingredients);
+      // console.log(state.recipe.ingredients);
       state.recipe.parseIngredients();
 
       // calculate servings & time
@@ -91,7 +95,9 @@ const controlRecipe = async () => {
       state.recipe.calcServings();
 
       // render recipe
-      console.log(state.recipe.ingredients);
+      removeLoader();
+      recipeView.renderRecipe(state.recipe);
+      // console.log(state.recipe);
     } catch (err) {
       console.log(err);
     }
@@ -100,6 +106,4 @@ const controlRecipe = async () => {
 
 // window.addEventListener('hashchange', controlRecipe);
 
-['hashchange', 'load'].forEach(even =>
-  window.addEventListener(even, controlRecipe)
-);
+['hashchange'].forEach(even => window.addEventListener(even, controlRecipe));
