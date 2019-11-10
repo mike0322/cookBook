@@ -8,11 +8,13 @@ import { Fraction } from 'fractional';
 // 小數轉換為分數
 export const formatCount = count => {
   if (count) {
+    // console.log(count);
     // count = 2.5 => 轉換為 string => 轉換為 [2, 5] (str) => 轉換為 [2, 5] (num)
     const [int, dec] = count
       .toString()
       .split('.')
       .map(el => parseInt(el, 10));
+    // console.log(count.toString().length);
 
     // count = 1
     if (!dec) return count;
@@ -101,7 +103,7 @@ export default class Recipe {
       // 3) Parse ingredients into count, unit and ingredient
       const arrIng = ingredient.split(' ');
       const unitIndex = arrIng.findIndex(el2 => units.includes(el2));
-      //   console.log(arrIng);
+      // console.log(arrIng);
       //   console.log(unitIndex);
 
       let objIng;
@@ -147,5 +149,15 @@ export default class Recipe {
       return objIng;
     });
     this.ingredients = newIngredients;
+  }
+
+  updateServingsAndIng(type) {
+    // servings
+    const newServings = type === 'dec' ? this.servings - 1 : this.servings + 1;
+    // ingredient
+    this.ingredients.forEach(ing => {
+      ing.count *= newServings / this.servings;
+    });
+    this.servings = newServings;
   }
 }
