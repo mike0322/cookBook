@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable node/no-unsupported-features/es-syntax */
-import Search from './model/SearchModel';
+import Search from './model/searchModel';
 import Recipe from './model/RecipeModel';
 
 import { el, renderLoader, removeLoader } from './view/base';
@@ -97,7 +97,7 @@ const controlRecipe = async () => {
       // render recipe
       removeLoader();
       recipeView.renderRecipe(state.recipe);
-      // console.log(state.recipe);
+      // console.log(state.recipe.ingredients);
     } catch (err) {
       console.log(err);
     }
@@ -107,3 +107,15 @@ const controlRecipe = async () => {
 // window.addEventListener('hashchange', controlRecipe);
 
 ['hashchange'].forEach(even => window.addEventListener(even, controlRecipe));
+
+el.recipes.addEventListener('click', e => {
+  if (e.target.matches('.btn-increase, .btn-increase *')) {
+    state.recipe.updateServingsAndIng('inc');
+    recipeView.renderUpdateIngCount(state.recipe);
+  } else if (e.target.matches('.btn-decrease, .btn-decrease *')) {
+    if (state.recipe.servings > 1) {
+      state.recipe.updateServingsAndIng('dec');
+      recipeView.renderUpdateIngCount(state.recipe);
+    }
+  }
+});
