@@ -1,12 +1,15 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-undef */
 /* eslint-disable node/no-unsupported-features/es-syntax */
 import Search from './model/searchModel';
 import Recipe from './model/RecipeModel';
+import ShoppingList from './model/shopping';
 
 import { el, renderLoader, removeLoader } from './view/base';
 
 import * as searchView from './view/SearchView';
 import * as recipeView from './view/RecipeVies';
+import * as shoppingView from './view/ShoppingListView';
 
 // init state obj
 const state = {};
@@ -44,6 +47,7 @@ const controlSearch = async () => {
   }
 };
 
+// listen btn click
 el.searchResPage.addEventListener('click', e => {
   const btn = e.target.closest('.btn-inline');
   if (btn) {
@@ -54,6 +58,7 @@ el.searchResPage.addEventListener('click', e => {
   }
 });
 
+// submit 後執行 controlSearch
 el.searchForm.addEventListener('submit', e => {
   e.preventDefault();
   controlSearch();
@@ -104,10 +109,31 @@ const controlRecipe = async () => {
   }
 };
 
-// window.addEventListener('hashchange', controlRecipe);
+/*=====================
+  Shopping List Control
+======================*/
+const controlShoppingList = () => {
+  // create new Shopping List
+  if (!state.shoppingList) state.shoppingList = new ShoppingList();
 
+  // 將 recipe 的 ingredients 加入到 shopping list 裡面的 item
+  state.recipe.ingredients.forEach(item => {
+    const el = state.shoppingList.addItem(
+      item.count,
+      item.unit,
+      item.ingredient
+    );
+    // render shopping list
+    shoppingView.renderShopping(el);
+  });
+  console.log(state.shoppingList);
+};
+
+// hash change 後執行 controlRecipe
+// window.addEventListener('hashchange', controlRecipe);
 ['hashchange'].forEach(even => window.addEventListener(even, controlRecipe));
 
+// recipe btn listener
 el.recipes.addEventListener('click', e => {
   if (e.target.matches('.btn-increase, .btn-increase *')) {
     state.recipe.updateServingsAndIng('inc');
@@ -116,6 +142,30 @@ el.recipes.addEventListener('click', e => {
     if (state.recipe.servings > 1) {
       state.recipe.updateServingsAndIng('dec');
       recipeView.renderUpdateIngCount(state.recipe);
+    }
+  } else if (e.target.matches('.recipe__btn--add, .recipe__btn--add *')) {
+    controlShoppingList();
+  }
+});
+
+// shopping list btn listener
+el.shoppingList.addEventListener('click', e => {
+  const id = e.target.closest('.shopping__item').dataset.itemid;
+
+  // handle delete btn
+  if (e.target.matches('.shopping__delete, .shopping__delete *')) {
+    // delete from ui
+    shoppingView.deleteShopping(id);
+
+    // delete from state
+    state.shoppingList.deleteItem(id);
+    // handle count input
+  } else if (e.target.matches('.shopping__count-value')) {
+    if (e.target.value >= 0.1) {
+      const val = parseFloat(e.target.value, 10);
+      state.shoppingList.updateCount(id, val);
+
+      console.log(state.shoppingList);
     }
   }
 });
