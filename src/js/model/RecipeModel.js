@@ -43,7 +43,6 @@ export default class Recipe {
         `https://forkify-api.herokuapp.com/api/get?rId=${this.id}`
       );
       this.title = res.data.recipe.title;
-      this.title = res.data.recipe.title;
       this.author = res.data.recipe.publisher;
       this.img = res.data.recipe.image_url;
       this.ingredients = res.data.recipe.ingredients;

@@ -159,13 +159,13 @@ el.shoppingList.addEventListener('click', e => {
 
     // delete from state
     state.shoppingList.deleteItem(id);
-
+    console.log(state.shoppingList);
     // handle count input
   } else if (e.target.matches('.shopping__count-value')) {
     if (e.target.value >= 0.1) {
       const val = parseFloat(e.target.value, 10);
       state.shoppingList.updateCount(id, val);
-
+      console.log(state);
       console.log(state.shoppingList);
     }
   }
