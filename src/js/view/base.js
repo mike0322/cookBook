@@ -19,7 +19,11 @@ export const el = {
 
   recipes: document.querySelector('.recipe'),
 
-  shoppingList: document.querySelector('.shopping__list')
+  shoppingList: document.querySelector('.shopping__list'),
+
+  likeListBox: document.querySelector('.likes__field'),
+
+  likeList: document.querySelector('.likes__list')
 };
 
 // eslint-disable-next-line node/no-unsupported-features/es-syntax
