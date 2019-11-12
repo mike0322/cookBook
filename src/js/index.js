@@ -88,9 +88,6 @@ const controlRecipe = async () => {
     // create new recipe obj
     state.recipe = new Recipe(id);
 
-    // Testing
-    // window.r = state.recipe;
-
     try {
       // get recipe data & parse ingredients
       await state.recipe.getRecipe();
@@ -162,9 +159,6 @@ el.shoppingList.addEventListener('click', e => {
 /*=====================
   Like Control
 ======================*/
-// test
-state.likes = new Likes();
-likeView.toggleLikeList(state.likes.getLikeNum());
 
 const controlLike = () => {
   if (!state.likes) state.likes = new Likes();
@@ -193,6 +187,18 @@ const controlLike = () => {
 
   likeView.toggleLikeList(state.likes.getLikeNum());
 };
+
+window.addEventListener('load', () => {
+  state.likes = new Likes();
+  // 將 local storage 數據取出到 likes array
+  state.likes.getStorageData();
+
+  // render like btn
+  likeView.toggleLikeList(state.likes.getLikeNum());
+
+  // render like list
+  state.likes.likes.forEach(item => likeView.renderLike(item));
+});
 
 // hash change 後執行 controlRecipe
 // window.addEventListener('hashchange', controlRecipe);
