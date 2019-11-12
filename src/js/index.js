@@ -147,19 +147,13 @@ el.shoppingList.addEventListener('click', e => {
     // delete from state
     state.shoppingList.deleteItem(id);
     console.log(state.shoppingList);
-<<<<<<< HEAD
-=======
 
->>>>>>> dev
     // handle count input
   } else if (e.target.matches('.shopping__count-value')) {
     if (e.target.value >= 0.1) {
       const val = parseFloat(e.target.value, 10);
       state.shoppingList.updateCount(id, val);
-<<<<<<< HEAD
-      console.log(state);
-      console.log(state.shoppingList);
-=======
+
       // console.log(state.shoppingList);
     }
   }
@@ -215,7 +209,6 @@ el.recipes.addEventListener('click', e => {
     if (state.recipe.servings > 1) {
       state.recipe.updateServingsAndIng('dec');
       recipeView.renderUpdateIngCount(state.recipe);
->>>>>>> dev
     }
 
     // handle shopping list btn
